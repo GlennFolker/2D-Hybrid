@@ -20,17 +20,10 @@ void main(){
 
     trns[3][0] = u_camPos.x;
     trns[3][1] = u_camPos.y;
-    trns[3][2] = translation.z - u_scl * u_zscl * u_zscl;
-
-    trns *= mat4(
-        vec4(u_scl, 0.0, 0.0, 0.0),
-        vec4(0.0, u_scl, 0.0, 0.0),
-        vec4(0.0, 0.0, u_scl, 0.0),
-        vec4(0.0, 0.0, 0.0, 1.0)
-    );
 
     vec2 diff = u_camPos.xy - translation.xy;
     vec4 pos = u_proj * trns * a_position;
+    pos.xy *= u_scl;
 
     pos -= vec4(diff * pos.z * u_zscl / u_res, 0.0, 0.0);
     gl_Position = pos;

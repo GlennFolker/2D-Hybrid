@@ -24,7 +24,7 @@ public class Hybrid implements ApplicationListener{
 
     public Mesh model;
     public HShader shader;
-    public float yScl = 5f;
+    public float yScl = 2f;
 
     public Vec3 pos = new Vec3();
     public Mat3D trns = new Mat3D();
@@ -72,7 +72,7 @@ public class Hybrid implements ApplicationListener{
 
         camera.position.set(pos);
 
-        float scl = 1f;
+        float scl = 1f + Mathf.absin(20f, 2f);
         camera.resize(graphics.getWidth() / scl, graphics.getHeight() / scl);
 
         cam3D.position.set(camera.position.x, camera.position.y, cam3D.far / 2f);
