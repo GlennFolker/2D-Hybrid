@@ -1,0 +1,47 @@
+plugins{
+    id 'java'
+}
+
+final def ver = 'v130'
+final def entry = 'hybrid.Hybrid'
+final def assetsDir = new File(rootDir, 'assets/')
+
+sourceSets.main{
+    java.srcDirs = ['src/']
+    resources.srcDirs = [assetsDir]
+}
+
+sourceCompatibility = 16
+targetCompatibility = 16
+
+repositories{
+    mavenCentral()
+    maven{ url 'https://www.jitpack.io' }
+}
+
+dependencies{
+    implementation "com.github.Anuken.Arc:arc-core:$ver"
+    implementation "com.github.Anuken.Arc:g3d:$ver"
+    implementation "com.github.Anuken.Arc:backend-sdl:$ver"
+    implementation "com.github.Anuken.Arc:natives-desktop:$ver"
+}
+
+task deploy(type: Jar, dependsOn: [classes, configurations.runtimeClasspath]){
+    archiveFileName.set 'Hybrid.jar'
+
+    from sourceSets.main.output.classesDirs
+    from sourceSets.main.output.resourcesDir
+
+    from configurations.runtimeClasspath.collect{ it.isDirectory() ? it : zipTree(it) }
+
+    manifest.attributes(
+        main: entry
+    )
+}
+
+task run(type: JavaExec, dependsOn: [classes, configurations.runtimeClasspath]){
+    main entry
+    classpath sourceSets.main.runtimeClasspath
+    workingDir assetsDir
+    standardInput System.in
+}
